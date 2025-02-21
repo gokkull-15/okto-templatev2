@@ -12,22 +12,14 @@ const App = () => {
     // Handle Google login
     async function handleGoogleLogin(credentialResponse: any) {
         try {
-            const response = await oktoClient.loginUsingOAuth({
+            await oktoClient.loginUsingOAuth({
                 idToken: credentialResponse.credential,
                 provider: "google",
             });
+            console.log(oktoClient.userSWA);
 
-            console.log("User SWA:", oktoClient.userSWA);
-            console.log("Login Response:", response);
-
-            // Check if sessionData.sessionPk exists
-            if (response.sessionData && response.sessionData.sessionPk) {
-                // Redirect to /home after successful login and sessionPk is received
-                navigate('/home');
-            } else {
-                // If sessionPk is not present in the response
-                setError("Session data is missing. Please try again.");
-            }
+            // Redirect to /home after successful login
+            navigate('/home');
         } catch (error) {
             console.error("Authentication error:", error);
             setError("Authentication failed. Please try again.");
@@ -35,43 +27,40 @@ const App = () => {
     }
 
     return (
-        <div className="min-h-screen bg-white">
+        <div className="min-h-screen bg-white flex justify-center items-center">
             <Routes>
                 {/* Login Route - this is displayed first */}
                 <Route
                     path="/"
                     element={
-                        <div className="min-h-screen flex justify-center items-center">
-                            {/* Login Box */}
-                            <div className="w-full max-w-sm p-8 bg-white shadow-lg rounded-lg flex flex-col justify-center items-center space-y-6">
-                                {/* Title */}
-                                <h1 className="text-3xl font-bold text-gray-900 text-center">
-                                    Google Authentication
-                                </h1>
+                        <div className="w-full max-w-sm p-8 bg-white shadow-lg rounded-lg flex flex-col justify-center items-center space-y-6">
+                            {/* Title */}
+                            <h1 className="text-3xl font-bold text-gray-900 text-center">
+                                Google Authentication
+                            </h1>
 
-                                {/* Error message if any */}
-                                {error && (
-                                    <div className="bg-red-500 text-white py-2 px-4 rounded">
-                                        {error}
-                                    </div>
-                                )}
-
-                                {/* Login Method Text */}
-                                <div className="text-gray-700 text-sm text-center">
-                                    Please sign in to continue
+                            {/* Error message if any */}
+                            {error && (
+                                <div className="bg-red-500 text-white py-2 px-4 rounded">
+                                    {error}
                                 </div>
+                            )}
 
-                                {/* Google login button */}
-                                <GoogleLogin
-                                    onSuccess={handleGoogleLogin} // Handle successful login
-                                    onError={() => setError("Google login failed. Please try again.")}
-                                    theme="outline"
-                                    shape="rectangular"
-                                    width="250px"
-                                    text="signin_with"
-                                    className="transition duration-300 ease-in-out transform hover:scale-105"
-                                />
+                            {/* Login Method Text */}
+                            <div className="text-gray-700 text-sm text-center">
+                                Please sign in to continue
                             </div>
+
+                            {/* Google login button */}
+                            <GoogleLogin
+                                onSuccess={handleGoogleLogin} // Handle successful login
+                                onError={() => setError("Google login failed. Please try again.")}
+                                theme="outline"
+                                shape="rectangular"
+                                width="250px"
+                                text="signin_with"
+                                className="transition duration-300 ease-in-out transform hover:scale-105"
+                            />
                         </div>
                     }
                 />
