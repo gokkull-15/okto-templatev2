@@ -9,7 +9,8 @@ import {
   getOrdersHistory,
   getNftCollections,
 } from "@okto_web3/react-sdk";
-import Navbar from "./Navbar"; // Import the Navbar component
+
+import Navbar from "./components/Navbar"; // Import the Navbar component
 
 const Home = () => {
   const [accountData, setAccountData] = useState<any[]>([]); // Store account data
@@ -19,6 +20,7 @@ const Home = () => {
   const [chains, setChains] = useState<any[]>([]); // Store supported chains data
   const [ordersHistory, setOrdersHistory] = useState<any[]>([]); // Store order history data
   const [nftCollections, setNftCollections] = useState<any[]>([]); // Store NFT collection data
+
   const [activeSection, setActiveSection] = useState<
     | "portfolio"
     | "tokens"
@@ -66,6 +68,7 @@ const Home = () => {
   const getPortfolioActivityData = async () => {
     try {
       const portfolioActivityResponse = await getPortfolioActivity(oktoClient);
+      console.log("Portfolio activity:", portfolioActivityResponse);
       setPortfolioActivity(portfolioActivityResponse);
       setActiveSection("activity");
     } catch (error) {
@@ -129,6 +132,9 @@ const Home = () => {
               break;
             case "nft":
               getNftCollectionsData();
+              break;
+            case "tokenTransfer":
+              tokenTransfer();
               break;
             default:
               break;
@@ -240,25 +246,25 @@ const Home = () => {
             <h3 className="text-2xl font-bold mb-4 text-gray-500">
               Portfolio Activity:
             </h3>
-            <table className="min-w-full table-auto border-collapse border border-gray-300 text-gray-500">
+            <table className="w-full table-auto border-collapse border border-gray-300 text-gray-500">
               <thead>
                 <tr>
-                  <th className="border border-gray-300 p-2 text-xs">
+                  <th className="border border-gray-300 p-3 text-sm">
                     Description
                   </th>
-                  <th className="border border-gray-300 p-2 text-xs">
+                  <th className="border border-gray-300 p-3 text-sm">
                     Quantity
                   </th>
-                  <th className="border border-gray-300 p-2 text-xs">
+                  <th className="border border-gray-300 p-3 text-sm">
                     Transaction Hash
                   </th>
-                  <th className="border border-gray-300 p-2 text-xs">
+                  <th className="border border-gray-300 p-3 text-sm">
                     Timestamp
                   </th>
-                  <th className="border border-gray-300 p-2 text-xs">
+                  <th className="border border-gray-300 p-3 text-sm">
                     Network Symbol
                   </th>
-                  <th className="border border-gray-300 p-2 text-xs">
+                  <th className="border border-gray-300 p-3 text-sm">
                     CAIP ID
                   </th>
                 </tr>
@@ -267,13 +273,13 @@ const Home = () => {
                 {portfolioActivity && portfolioActivity.length > 0 ? (
                   portfolioActivity.map((activity, index) => (
                     <tr key={index}>
-                      <td className="border border-gray-300 p-2 text-xs">
+                      <td className="border border-gray-300 p-3">
                         {activity.description ?? ""}
                       </td>
-                      <td className="border border-gray-300 p-2 text-xs">
+                      <td className="border border-gray-300 p-3">
                         {activity.quantity ?? ""}
                       </td>
-                      <td className="border border-gray-300 p-2 text-xs">
+                      <td className="border border-gray-300 p-3">
                         {activity.txHash ? (
                           <a
                             href={`${activity.networkExplorerUrl}tx/${activity.txHash}`}
@@ -287,7 +293,7 @@ const Home = () => {
                           ""
                         )}
                       </td>
-                      <td className="border border-gray-300 p-2 text-xs">
+                      <td className="border border-gray-300 p-3">
                         {activity.timestamp
                           ? new Date(activity.timestamp * 1000)
                               .toISOString()
@@ -295,10 +301,10 @@ const Home = () => {
                               .replace("T", " ")
                           : ""}
                       </td>
-                      <td className="border border-gray-300 p-2 text-xs">
+                      <td className="border border-gray-300 p-3">
                         {activity.networkSymbol ?? ""}
                       </td>
-                      <td className="border border-gray-300 p-2 text-xs">
+                      <td className="border border-gray-300 p-3">
                         {activity.caipId ?? ""}
                       </td>
                     </tr>
@@ -307,7 +313,7 @@ const Home = () => {
                   <tr>
                     <td
                       colSpan="6"
-                      className="border border-gray-300 p-2 text-xs text-center"
+                      className="border border-gray-300 p-3 text-center"
                     >
                       No Data Available
                     </td>
@@ -354,74 +360,76 @@ const Home = () => {
         )}
 
         {/* Orders History Data */}
-        {activeSection === "history" && ordersHistory.length > 0 && (
+        {activeSection === "history" && (
           <div>
             <h3 className="text-2xl font-bold mb-4 text-gray-500">
               Orders History:
             </h3>
-            <table className="min-w-full table-auto border-collapse border border-gray-300 text-gray-500">
+            <table className="w-full table-auto border-collapse border border-gray-300 text-gray-500">
               <thead>
                 <tr>
-                  <th className="border border-gray-300 p-1 text-xs">
+                  <th className="border border-gray-300 p-3 text-sm">
                     Intent ID
                   </th>
-                  <th className="border border-gray-300 p-1 text-xs">
+                  <th className="border border-gray-300 p-3 text-sm">
                     Intent Type
                   </th>
-                  <th className="border border-gray-300 p-1 text-xs">
+                  <th className="border border-gray-300 p-3 text-sm">
                     Network Name
                   </th>
-                  <th className="border border-gray-300 p-1 text-xs w-1/4">
-                    Transaction Hash
-                  </th>{" "}
-                  {/* Reduced width */}
-                  <th className="border border-gray-300 p-1 text-xs">Status</th>
-                  <th className="border border-gray-300 p-1 text-xs">
+
+                  <th className="border border-gray-300 p-3 text-sm">
                     Timestamp
                   </th>
-                  <th className="border border-gray-300 p-1 text-xs">
+                  <th className="border border-gray-300 p-3 text-sm">
                     Details
                   </th>
                 </tr>
               </thead>
               <tbody>
-                {ordersHistory.map((order, index) => (
-                  <tr key={index}>
-                    <td className="border border-gray-300 p-1 text-xs">
-                      {order.intentId}
-                    </td>
-                    <td className="border border-gray-300 p-1 text-xs">
-                      {order.intentType}
-                    </td>
-                    <td className="border border-gray-300 p-1 text-xs">
-                      {order.networkName}
-                    </td>
-                    <td className="border border-gray-300 p-1 text-xs w-1/4">
-                      {order.transactionHash.length > 0
-                        ? order.transactionHash.join(", ")
-                        : "N/A"}
-                    </td>
-                    <td className="border border-gray-300 p-1 text-xs">
-                      {order.reason}
-                    </td>
-                    <td className="border border-gray-300 p-1 text-xs">
-                      {new Date(order.blockTimestamp * 1000)
-                        .toISOString()
-                        .slice(0, 19)
-                        .replace("T", " ")}
-                    </td>
-                    <td className="border border-gray-300 p-1 text-xs">
-                      {order.details.caip2id}
+                {ordersHistory && ordersHistory.length > 0 ? (
+                  ordersHistory.map((order, index) => (
+                    <tr key={index}>
+                      <td className="border border-gray-300 p-3">
+                        {order.intentId}
+                      </td>
+                      <td className="border border-gray-300 p-3">
+                        {order.intentType}
+                      </td>
+                      <td className="border border-gray-300 p-3">
+                        {order.networkName}
+                      </td>
+
+                      <td className="border border-gray-300 p-3">
+                        {order.blockTimestamp
+                          ? new Date(order.blockTimestamp * 1000)
+                              .toISOString()
+                              .slice(0, 19)
+                              .replace("T", " ")
+                          : ""}
+                      </td>
+                      <td className="border border-gray-300 p-3">
+                        {order.details.caip2id}
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td
+                      colSpan="7"
+                      className="border border-gray-300 p-3 text-center"
+                    >
+                      No Data Available
                     </td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
           </div>
         )}
 
         {/* NFT Collections Data */}
-        {activeSection === "nft" && nftCollections.length > 0 && (
+        {activeSection === "nft" && (
           <div>
             <h3 className="text-2xl font-bold mb-4 text-gray-500">
               NFT Collections:
@@ -440,29 +448,42 @@ const Home = () => {
                 </tr>
               </thead>
               <tbody>
-                {nftCollections.map((nft, index) => (
-                  <tr key={index}>
-                    <td className="border border-gray-300 p-2">
-                      {nft.intentId}
-                    </td>
-                    <td className="border border-gray-300 p-2">
-                      {nft.networkName}
-                    </td>
-                    <td className="border border-gray-300 p-2">
-                      {nft.details.nftId}
-                    </td>
-                    <td className="border border-gray-300 p-2">
-                      {nft.details.recipientWalletAddress}
-                    </td>
-                    <td className="border border-gray-300 p-2">{nft.reason}</td>
-                    <td className="border border-gray-300 p-2">
-                      {new Date(nft.blockTimestamp * 1000)
-                        .toISOString()
-                        .slice(0, 19)
-                        .replace("T", " ")}
+                {nftCollections.length > 0 ? (
+                  nftCollections.map((nft, index) => (
+                    <tr key={index}>
+                      <td className="border border-gray-300 p-2">
+                        {nft.intentId}
+                      </td>
+                      <td className="border border-gray-300 p-2">
+                        {nft.networkName}
+                      </td>
+                      <td className="border border-gray-300 p-2">
+                        {nft.details.nftId}
+                      </td>
+                      <td className="border border-gray-300 p-2">
+                        {nft.details.recipientWalletAddress}
+                      </td>
+                      <td className="border border-gray-300 p-2">
+                        {nft.reason}
+                      </td>
+                      <td className="border border-gray-300 p-2">
+                        {new Date(nft.blockTimestamp * 1000)
+                          .toISOString()
+                          .slice(0, 19)
+                          .replace("T", " ")}
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td
+                      colSpan="6"
+                      className="border border-gray-300 p-2 text-center text-gray-400"
+                    >
+                      No NFT collections available
                     </td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
           </div>

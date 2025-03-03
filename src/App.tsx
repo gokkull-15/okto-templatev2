@@ -1,15 +1,24 @@
 import { useOkto } from "@okto_web3/react-sdk";
 import { GoogleLogin } from "@react-oauth/google";
-import { useNavigate, Routes, Route } from "react-router-dom";
-import Home from "./Home"; // Import Home component
-import { useState } from "react"; // To handle success/error state
+import { useNavigate, Routes, Route, useLocation } from "react-router-dom";
+import { useState } from "react";
+import Navbar from "./components/Navbar";
+import TokenTransfer from "./components/TokenTransferForm";
+import Account from "./components/Account";
+import Portfolio from "./components/Portfolio";
+import Tokens from "./components/Tokens";
+import Activity from "./components/Activity";
+import Chains from "./components/Chains";
+import History from "./components/History";
+import NFT from "./components/NFT";
+import RawTransfer from "./components/RawTransfer";
 
 const App = () => {
   const oktoClient = useOkto();
-  const navigate = useNavigate(); // For navigation after successful login
-  const [error, setError] = useState<string | null>(null); // State to hold error message
+  const navigate = useNavigate();
+  const location = useLocation(); // Get current route
+  const [error, setError] = useState<string | null>(null);
 
-  // Handle Google login
   async function handleGoogleLogin(credentialResponse: any) {
     try {
       await oktoClient.loginUsingOAuth({
@@ -17,9 +26,7 @@ const App = () => {
         provider: "google",
       });
       console.log(oktoClient.userSWA);
-
-      // Redirect to /home after successful login
-      navigate("/home");
+      navigate("/portfolio");
     } catch (error) {
       console.error("Authentication error:", error);
       setError("Authentication failed. Please try again.");
@@ -27,49 +34,56 @@ const App = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white flex justify-center items-center">
-      <Routes>
-        {/* Login Route - this is displayed first */}
-        <Route
-          path="/"
-          element={
-            <div className="w-full max-w-sm p-8 bg-white shadow-lg rounded-lg flex flex-col justify-center items-center space-y-6">
-              {/* Title */}
-              <h1 className="text-3xl font-bold text-gray-900 text-center">
-                Google Authentication
-              </h1>
+    <div className="min-h-screen bg-gray-900 text-white flex flex-col">
+      {location.pathname !== "/" && <Navbar onNavClick={navigate} />}
 
-              {/* Error message if any */}
-              {error && (
-                <div className="bg-red-500 text-white py-2 px-4 rounded">
-                  {error}
+      <div className="flex flex-col justify-center items-center space-y-6 p-6 w-full">
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <div className="flex flex-col items-center justify-center h-screen">
+                <h1 className="text-4xl font-bold text-white mb-6">
+                  Okto-TemplateV2
+                </h1>
+                <div className="w-full max-w-sm p-8 bg-gray-800 shadow-lg rounded-lg flex flex-col justify-center items-center space-y-6">
+                  <h1 className="text-3xl font-bold text-white text-center">
+                    Google Authentication
+                  </h1>
+                  {error && (
+                    <div className="bg-red-500 text-white py-2 px-4 rounded">
+                      {error}
+                    </div>
+                  )}
+                  <div className="text-gray-400 text-sm text-center">
+                    Please sign in to continue
+                  </div>
+                  <GoogleLogin
+                    onSuccess={handleGoogleLogin}
+                    onError={() =>
+                      setError("Google login failed. Please try again.")
+                    }
+                    theme="outline"
+                    shape="rectangular"
+                    width="250px"
+                    text="signin_with"
+                    className="transition duration-300 ease-in-out transform hover:scale-105"
+                  />
                 </div>
-              )}
-
-              {/* Login Method Text */}
-              <div className="text-gray-700 text-sm text-center">
-                Please sign in to continue
               </div>
-
-              {/* Google login button */}
-              <GoogleLogin
-                onSuccess={handleGoogleLogin} // Handle successful login
-                onError={() =>
-                  setError("Google login failed. Please try again.")
-                }
-                theme="outline"
-                shape="rectangular"
-                width="250px"
-                text="signin_with"
-                className="transition duration-300 ease-in-out transform hover:scale-105"
-              />
-            </div>
-          }
-        />
-
-        {/* Home Route - after successful login */}
-        <Route path="/home" element={<Home />} />
-      </Routes>
+            }
+          />
+          <Route path="/transfer" element={<TokenTransfer />} />
+          <Route path="/account" element={<Account />} />
+          <Route path="/portfolio" element={<Portfolio />} />
+          <Route path="/tokens" element={<Tokens />} />
+          <Route path="/activity" element={<Activity />} />
+          <Route path="/chains" element={<Chains />} />
+          <Route path="/history" element={<History />} />
+          <Route path="/nft" element={<NFT />} />
+          <Route path="/rawTransfer" element={<RawTransfer />} />
+        </Routes>
+      </div>
     </div>
   );
 };
