@@ -249,6 +249,7 @@ const Home = () => {
             <table className="w-full table-auto border-collapse border border-gray-300 text-gray-500">
               <thead>
                 <tr>
+<<<<<<< HEAD
                   <th className="border border-gray-300 p-3 text-sm">
                     Description
                   </th>
@@ -265,6 +266,24 @@ const Home = () => {
                     Network Symbol
                   </th>
                   <th className="border border-gray-300 p-3 text-sm">
+=======
+                  <th className="border border-gray-300 p-1 text-sm">
+                    Description
+                  </th>
+                  <th className="border border-gray-300 p-1 text-sm">
+                    Quantity
+                  </th>
+                  <th className="border border-gray-300 p-1 text-sm">
+                    Transaction Hash
+                  </th>
+                  <th className="border border-gray-300 p-1 text-sm">
+                    Timestamp
+                  </th>
+                  <th className="border border-gray-300 p-1 text-sm">
+                    Network Symbol
+                  </th>
+                  <th className="border border-gray-300 p-1 text-sm">
+>>>>>>> b96b7a92d9a0b5c92dfe0a970427948169be4b44
                     CAIP ID
                   </th>
                 </tr>
@@ -273,6 +292,7 @@ const Home = () => {
                 {portfolioActivity && portfolioActivity.length > 0 ? (
                   portfolioActivity.map((activity, index) => (
                     <tr key={index}>
+<<<<<<< HEAD
                       <td className="border border-gray-300 p-3">
                         {activity.description ?? ""}
                       </td>
@@ -280,6 +300,15 @@ const Home = () => {
                         {activity.quantity ?? ""}
                       </td>
                       <td className="border border-gray-300 p-3">
+=======
+                      <td className="border border-gray-300 p-1 text-sm">
+                        {activity.description ?? ""}
+                      </td>
+                      <td className="border border-gray-300 p-1 text-sm">
+                        {activity.quantity ?? ""}
+                      </td>
+                      <td className="border border-gray-300 p-1 text-sm">
+>>>>>>> b96b7a92d9a0b5c92dfe0a970427948169be4b44
                         {activity.txHash ? (
                           <a
                             href={`${activity.networkExplorerUrl}tx/${activity.txHash}`}
@@ -293,7 +322,11 @@ const Home = () => {
                           ""
                         )}
                       </td>
+<<<<<<< HEAD
                       <td className="border border-gray-300 p-3">
+=======
+                      <td className="border border-gray-300 p-1 text-sm">
+>>>>>>> b96b7a92d9a0b5c92dfe0a970427948169be4b44
                         {activity.timestamp
                           ? new Date(activity.timestamp * 1000)
                               .toISOString()
@@ -301,10 +334,17 @@ const Home = () => {
                               .replace("T", " ")
                           : ""}
                       </td>
+<<<<<<< HEAD
                       <td className="border border-gray-300 p-3">
                         {activity.networkSymbol ?? ""}
                       </td>
                       <td className="border border-gray-300 p-3">
+=======
+                      <td className="border border-gray-300 p-1 text-sm">
+                        {activity.networkSymbol ?? ""}
+                      </td>
+                      <td className="border border-gray-300 p-1 text-sm">
+>>>>>>> b96b7a92d9a0b5c92dfe0a970427948169be4b44
                         {activity.caipId ?? ""}
                       </td>
                     </tr>
@@ -368,6 +408,7 @@ const Home = () => {
             <table className="w-full table-auto border-collapse border border-gray-300 text-gray-500">
               <thead>
                 <tr>
+<<<<<<< HEAD
                   <th className="border border-gray-300 p-3 text-sm">
                     Intent ID
                   </th>
@@ -382,6 +423,25 @@ const Home = () => {
                     Timestamp
                   </th>
                   <th className="border border-gray-300 p-3 text-sm">
+=======
+                  <th className="border border-gray-300 p-1 text-sm">
+                    Intent ID
+                  </th>
+                  <th className="border border-gray-300 p-1 text-sm">
+                    Intent Type
+                  </th>
+                  <th className="border border-gray-300 p-1 text-sm">
+                    Network Name
+                  </th>
+                  <th className="border border-gray-300 p-1 text-sm w-1/4">
+                    Transaction Hash
+                  </th>
+                  <th className="border border-gray-300 p-1 text-sm">Status</th>
+                  <th className="border border-gray-300 p-1 text-sm">
+                    Timestamp
+                  </th>
+                  <th className="border border-gray-300 p-1 text-sm">
+>>>>>>> b96b7a92d9a0b5c92dfe0a970427948169be4b44
                     Details
                   </th>
                 </tr>
@@ -390,6 +450,7 @@ const Home = () => {
                 {ordersHistory && ordersHistory.length > 0 ? (
                   ordersHistory.map((order, index) => (
                     <tr key={index}>
+<<<<<<< HEAD
                       <td className="border border-gray-300 p-3">
                         {order.intentId}
                       </td>
@@ -401,6 +462,26 @@ const Home = () => {
                       </td>
 
                       <td className="border border-gray-300 p-3">
+=======
+                      <td className="border border-gray-300 p-1 text-sm">
+                        {order.intentId}
+                      </td>
+                      <td className="border border-gray-300 p-1 text-sm">
+                        {order.intentType}
+                      </td>
+                      <td className="border border-gray-300 p-1 text-sm">
+                        {order.networkName}
+                      </td>
+                      <td className="border border-gray-300 p-1 w-1/4 text-sm">
+                        {order.transactionHash.length > 0
+                          ? order.transactionHash.join(", ")
+                          : "N/A"}
+                      </td>
+                      <td className="border border-gray-300 p-1 text-sm">
+                        {order.reason}
+                      </td>
+                      <td className="border border-gray-300 p-1 text-sm">
+>>>>>>> b96b7a92d9a0b5c92dfe0a970427948169be4b44
                         {order.blockTimestamp
                           ? new Date(order.blockTimestamp * 1000)
                               .toISOString()
@@ -408,7 +489,11 @@ const Home = () => {
                               .replace("T", " ")
                           : ""}
                       </td>
+<<<<<<< HEAD
                       <td className="border border-gray-300 p-3">
+=======
+                      <td className="border border-gray-300 p-1 text-sm">
+>>>>>>> b96b7a92d9a0b5c92dfe0a970427948169be4b44
                         {order.details.caip2id}
                       </td>
                     </tr>
